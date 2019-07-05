@@ -4,21 +4,17 @@ module.exports = function solveSudoku(matrix) {
 
 function backtrack(matrix) {
   let row = -1, col = -1;
-  for (let r = 0; r < matrix.length; r++) {
-    for (let c = 0; c < matrix[r].length; c++) {
-      if (matrix[r][c] === 0) {
-        row = r;
-        col = c;
-        break;
+  rowsLoop:
+    for (let r = 0; r < matrix.length; r++) {
+      for (let c = 0; c < matrix[r].length; c++) {
+        if (matrix[r][c] === 0) {
+          row = r;
+          col = c;
+          break rowsLoop;
+        }
       }
     }
-    if (row > -1 && col > -1) {
-      break;
-    }
-  }
-  if (row < 0 && col < 0) {
-    return matrix;
-  }
+  if (row < 0 && col < 0) return matrix;
   do {
     do {
       matrix[row][col]++;
@@ -50,7 +46,5 @@ function getBoxBoundaries({row, col}) {
     rowStart: Math.floor(row / 3) * 3,
     colStart: Math.floor(col / 3) * 3,
   };
-  box.rowEnd = box.rowStart + 3;
-  box.colEnd = box.colStart + 3;
-  return box;
+  return {...box, rowEnd: box.rowStart + 3, colEnd: box.colStart + 3};
 }
