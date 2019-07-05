@@ -1,8 +1,8 @@
 module.exports = function solveSudoku(matrix) {
-  return backticks(matrix);
+  return backtrack(matrix);
 };
 
-function backticks(matrix) {
+function backtrack(matrix) {
   let row = -1, col = -1;
   for (let r = 0; r < matrix.length; r++) {
     for (let c = 0; c < matrix[r].length; c++) {
@@ -20,14 +20,6 @@ function backticks(matrix) {
     return matrix;
   }
   do {
-    matrix[row][col]++;
-    if (matrix[row][col] > 9) {
-      matrix[row][col] = 0;
-      return false;
-    }
-  } while (hasConflict(matrix, {row, col}));
-
-  while (!backticks(matrix)) {
     do {
       matrix[row][col]++;
       if (matrix[row][col] > 9) {
@@ -35,7 +27,7 @@ function backticks(matrix) {
         return false;
       }
     } while (hasConflict(matrix, {row, col}));
-  }
+  } while (!backtrack(matrix));
   return matrix;
 }
 
@@ -61,11 +53,4 @@ function getBoxBoundaries({row, col}) {
   box.rowEnd = box.rowStart + 3;
   box.colEnd = box.colStart + 3;
   return box;
-}
-
-function print(matrix) {
-  matrix.forEach(row => {
-    console.log(row.map(v => v.toString().padEnd(4, ' ')).join(''))
-  })
-  console.log('\n');
 }
